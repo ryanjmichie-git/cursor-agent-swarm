@@ -1,24 +1,22 @@
-#!/bin/sh
-# stop-verify.sh — keep the agent working until npm run verify passes.
-#
-# A Stop hook runs when the agent is about to finish its turn. Emitting a
-# block decision feeds the reason back to the model and runs another round;
-# the built-in cap ends the turn after 8 continuations. Set a generous
-# timeout on the hook (see .grok/hooks/stop-verify.json), since a timed-out
-# hook fails open and lets the agent stop.
+#!/usr/bin/env bash
+# Simple Stop / SubagentStop gate for the website demo.
+# Exits 0 and prints nothing → allow stop.
+# Prints {"decision":"block","reason":"..."} → keep the agent working.
 
-INPUT=$(cat)
+set -euo pipefail
 
-# Gate only genuine turn ends, not the observe-only session-end fire.
-REASON=$(echo "$INPUT" | grep -o '"reason":"[^"]*"' | sed 's/"reason":"//;s/"$//')
-if [ "$REASON" != "end_turn" ]; then
+# Optional: only gate real end-of-turn (uncomment if needed)
+# reason=$(echo "$INPUT" | jq -r '.reason // empty' 2>/dev/null || true)
+# if [[ "$reason" != "end_turn" && -n "$reason" ]]; then
+#   exit 0
+# fi
+
+if ! npm run verify >/tmp/grok-verify.log 2>&1; then
+  # Feed a short reason back to the model
+  reason=$(tail -n 20 /tmp/grok-verify.log | sed 's/"/\\"/g' | tr '\n' ' ' | cut -c1-400)
+  echo "{\"decision\":\"block\",\"reason\":\"Verification failed. Fix the errors and try again. Last output: ${reason}\"}"
   exit 0
 fi
 
-if npm run verify >/dev/null 2>&1; then
-  # Verify is green: allow the stop.
-  exit 0
-fi
-
-# Verify is red: keep the agent working, with the failure as feedback.
-echo '{"decision":"block","reason":"npm run verify failed (typecheck, lint, or build); fix the errors before finishing."}'
+# Success — allow the stop
+exit 0
