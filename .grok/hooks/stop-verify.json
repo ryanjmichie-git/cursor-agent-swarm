@@ -5,7 +5,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "bin/stop-verify.sh",
+            "command": "../../bin/stop-verify.sh",
             "timeout": 180
           }
         ]
@@ -16,7 +16,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "bin/stop-verify.sh",
+            "command": "../../bin/stop-verify.sh",
             "timeout": 120
           }
         ]
