@@ -9,7 +9,7 @@ Date: 2026-10-26. Session: setup, scaffold, then the Stop-hook path fix.
 - `grok inspect` (Grok Build 1.0.70) reported project trusted, `Agents.md` loaded, project skill `website-swarm`, agents `frontend` and `reviewer`, and project hooks present.
 - Scaffolded the one-page app in `1173f6f` (`1173f6fc5e132d674112c8ea0afac1691b87caa0`). Home page heading is `Swarm demo`. `.gitignore` ignores `node_modules`, `.next`, and `tsconfig.tsbuildinfo`.
 - Stop and SubagentStop in `.grok/hooks/stop-verify.json` now run `../../bin/stop-verify.sh`. Commit `f15bd4b` (`f15bd4be2264450d7a2fb8a052a592e00afb26b1`). The old command `bin/stop-verify.sh` was resolved from `.grok/hooks/` and reported `command not found`.
-- `package-lock.json` and `next-env.d.ts` are committed with this handoff.
+- `package-lock.json`, `next-env.d.ts`, and this file are committed in `6082eaa` (`6082eaa7a1331831548eeba6f7140382f2abf306`).
 
 ## Decisions
 
@@ -36,7 +36,7 @@ Date: 2026-10-26. Session: setup, scaffold, then the Stop-hook path fix.
 - `npm run verify`: passed again this session (exit 0). `tsc --noEmit` passed. `next lint` reported no warnings or errors. `next build` compiled and prerendered `/`.
 - Hook path: `.grok/hooks/../../bin/stop-verify.sh` resolves to `bin/stop-verify.sh`.
 - Dev check from the scaffold session: `http://localhost:3000` returned 200 with `<h1>Swarm demo</h1>`. Not rechecked this turn.
-- Commits on local `main`: `756bdf4`, `1173f6f`, `f15bd4b`, plus the commit that adds this file, the lockfile, and `next-env.d.ts`. Not pushed.
+- Commits on local `main`: `756bdf4`, `1173f6f`, `f15bd4b`, `6082eaa`. Not pushed.
 
 ## What's next
 
