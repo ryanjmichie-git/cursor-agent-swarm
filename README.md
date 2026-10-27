@@ -96,7 +96,7 @@ The hook is [bin/stop-verify.mjs](bin/stop-verify.mjs), registered in
 | The Stop hook blocks again and again | The agent can't or won't fix the error, for example because you told it not to edit files | Let it fix the error. The hook gives up after 3 identical failures; Grok stops after 8. |
 | Your Claude Code plugins still show in `grok inspect`, `/hooks-list` or the `/` menu | Grok 1.0.70 loads plugins from `~/.claude/plugins`. The launcher turns their skills off, but no per-launch switch unloads the plugins themselves. | Usually harmless: in the rehearsal runs they had no visible effect. If one gets in the way, present from an account without it. |
 | `npm warn install-scripts unrs-resolver` during `npm ci` | npm 11 holds back that package's install script | Safe to ignore here: `npm run verify` passes without it. |
-| The prompt doesn't come back after `/quit` | `grok.exe` kept running after `/quit` in 2 of 2 rehearsal runs (Windows) | Close that terminal and open a new one. |
+| The prompt doesn't come back after `/quit` | On Windows, `grok.exe` kept running after `/quit` in 6 of 6 tests | Close that terminal and open a new one. |
 | `grok --resume <id>` says the session wasn't found | Cause unknown (seen once) | Start a new session. |
 
 ## Reset after a demo

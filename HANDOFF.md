@@ -35,7 +35,9 @@ Second session (same day): the interactive dry run of `docs/DEMO.md` from NEXT_S
 - Grok's TUI was driven through a Windows pseudo-terminal (pywinpty + pyte in a scratch venv). Reason: headless `grok -p` can't test `/hooks-list`, `/plan` or the `a` key.
 - DEMO.md step 7 (reviewer) is now optional. Reason: the `website-swarm` skill already runs the reviewer inside step 4; repeating it took 6m48s.
 - Claude merged PR #2 on Ryan's "use your best judgment", with a merge commit, and kept `demo-ready`. Reason: dry run and verify passed, no CI or branch protection, and a merge commit lets local `main` fast-forward.
-- No README row for the `npm audit` result. Reason: the README would grow past its last draft, and the fix (Next.js 16) is Ryan's call.
+- No README row for the `npm audit` result. Reason: the README would grow past its last draft.
+- PostCSS is fixed with an npm `overrides` entry, not Next.js 16 (Ryan asked Claude to address it). Reason: a major upgrade would void the rehearsal; the override moves only Next's nested PostCSS, to the version Tailwind already uses, and the built CSS doesn't change.
+- The `/quit` hang is treated as a Grok 1.0.70 bug on Windows. DEMO.md now says to close the terminal after `/quit`. Reason: 6 of 6 runs, including a real console window.
 
 ## Artifacts
 
@@ -74,22 +76,25 @@ Second session (same day): the interactive dry run of `docs/DEMO.md` from NEXT_S
   - Reset: on today's `main` it leaves `?? .grok/logs/` (that ignore rule is only on `demo-ready`); on `demo-ready`, which `main` becomes after the merge, `git status` is clean.
   - Two false starts from my harness (Git Bash rewrote `/hooks-list`; the driver crashed) ended Grok before any file changed.
 - `npm run verify` after the doc fixes: exit 0 in 80 s; `test:hook` 6 pass, 0 fail.
-- `npm audit`: 2 vulnerabilities (1 high, 1 moderate) in PostCSS bundled inside Next.js 15. The only fix offered is `npm audit fix --force`, which installs Next.js 16 (breaking). Not changed.
+- `npm audit` on `main`: 2 vulnerabilities (1 high, 1 moderate) in PostCSS 8.4.31, which Next.js 15.5.28 (latest 15.x) pins. On branch `post-dry-run-fixes` (`acae894`, npm override to `postcss@^8.5.32`): `npm ci` then `npm audit` found 0; `npm run verify` exit 0; the built CSS is byte-identical to `main`'s (MD5 `b3c309a0451bb4252cdf8d9f334e65ed`).
+- `/quit` hang, 6 of 6 runs: typed `/quit` under the pseudo-terminal (3), `/quit` as the initial prompt there (1), and in a real `conhost` window (2). Grok's debug log stops mid-shutdown and the idle process never exits. Grok 1.0.70 is the latest stable (`grok update --check`).
 - Not done:
   - The `--trust` launcher argument was not run, because it writes Grok's trust store.
-  - The `/quit` hang was seen only under the pseudo-terminal, not in a plain terminal.
+  - Ctrl+Q as a clean exit: control keys sent through the pseudo-terminal had no visible effect, so it's untested.
   - The new sections were not checked at phone width.
   - Plugin hooks (superpowers SessionStart) are listed by `/hooks-list` and had no visible effect, but were not proven inert.
 - Published: `9fd6cce` pushed to `demo-ready` (Ryan approved). PR #2 merged into `main` at 2026-10-27 13:09 UTC as `0435489`: https://github.com/ryanjmichie-git/cursor-agent-swarm/pull/2
 - Merged `main`: DEMO.md step 1 as written: `git pull` fast-forwarded `d3a7e08..0435489`; `npm ci` and `npm run verify` exit 0 (195 s; 6 hook tests pass). The reset, run after simulated demo output on `demo-run`, left `git status` clean.
-- The commit after `0435489` (this handoff, kickoff, and the step 1 time in DEMO.md) is local only, not pushed.
+- `3febb8e` (handoff, kickoff, step 1 time) pushed to `origin/main` (Ryan approved).
+- Branch `post-dry-run-fixes` from `3febb8e`: the PostCSS override and the `/quit` doc update. Local only, not pushed.
 
 ## Progress
 
-10 of 10 plan tasks done (T0 to T9). Dry-run kickoff: 4 of 4 done-when items met.
+10 of 10 plan tasks done (T0 to T9). Dry-run kickoff: 4 of 4 done-when items met. Both
+optional follow-ups done on `post-dry-run-fixes`, waiting on a push.
 
 ## What's next
 
-1. Ryan approves pushing the local handoff commit to `origin/main`.
-2. Optional: decide whether to move to Next.js 16 for the PostCSS advisory.
-3. Optional: check whether `/quit` hangs in a plain terminal too.
+1. Ryan approves pushing `post-dry-run-fixes` and merging it into `main`. It changes the
+   installed PostCSS, so rerun DEMO.md setup step 1 after the merge.
+2. Optional: report the `/quit` hang to xAI with the evidence above.

@@ -47,7 +47,7 @@ Commands are shown for PowerShell, with the macOS, Linux or Git Bash version aft
    parent then wires the sections into `app/page.tsx`, adds header links, runs the
    `reviewer`, and finishes. Its summary gives the reviewer's `Pass` or `needs-work`.
    **Terminal 2** shows one `SubagentStop frontend quick pass` line per subagent, then
-   `Stop main full pass`. This step takes about 21 minutes: use it for step 5 and questions.
+   `Stop main full pass`. It takes about 21 minutes: use it for step 5 and questions.
 
 5. **Say:** "Each agent owned one file, so no two agents could collide. Only the parent
    touches the page itself."
@@ -62,7 +62,7 @@ Commands are shown for PowerShell, with the macOS, Linux or Git Bash version aft
    `Stop main full pass`.
    Rehearsed log: `Stop main full block 4.3s`, then `Stop main full pass 46.7s`.
 
-7. **Optional.** The reviewer already ran in step 4. To run it on its own, type:
+7. **Optional.** The reviewer already ran in step 4. To rerun it, type:
    ```
    Run the reviewer agent on this change. Give it the plan and the list of changed files.
    ```
@@ -75,8 +75,8 @@ Commands are shown for PowerShell, with the macOS, Linux or Git Bash version aft
 ## Afterward
 
 1. **Terminal 2.** Press `Ctrl+C` to stop the dev server.
-2. **Terminal 1.** Type `/quit`. If the prompt doesn't come back, close that terminal and
-   open a new one in the repo folder. Then reset:
+2. **Terminal 1.** Type `/quit`, then close that terminal: on Windows the prompt never came
+   back in testing. Open a new one in the repo folder and reset:
    ```
    git switch --discard-changes main
    git branch -D demo-run
