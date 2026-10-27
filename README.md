@@ -12,6 +12,7 @@ parallel, with a quality gate that hands every failure back to the agent that ca
 
 The page in `main` (header, hero, colophon) is the starting point. The live demo adds
 three more sections. [docs/DEMO.md](docs/DEMO.md) is the run-of-show with exact prompts.
+To use this with your own team, see [docs/TEAM-WORKFLOW.md](docs/TEAM-WORKFLOW.md).
 
 ## Requirements
 
@@ -56,12 +57,15 @@ Troubleshooting.
 
 | When | What runs | Typical time on the test machine |
 |------|-----------|-----------------------------------|
-| The main agent ends a turn | `npm run verify`: typecheck, lint, hook tests, build | 44 to 72 s when passing; 4 s when typecheck fails |
+| The main agent ends a turn | `npm run verify`: typecheck, lint, hook tests, check tests (`test:checks`), build | 44 to 72 s when passing; 4 s when typecheck fails |
 | A `frontend` subagent ends | typecheck + lint only | 12 to 16 s |
 | The session closes | nothing (skipped) | |
 
 - A failure prints `{"decision":"block","reason":...}` with the error text, and the agent
   keeps working in the same turn.
+- `lint` also runs two repo checks: [bin/check-content.mjs](bin/check-content.mjs) fails
+  on placeholder or empty source files, and [bin/check-lessons.mjs](bin/check-lessons.mjs)
+  fails on a team lesson with no source or a lessons edit outside a `lesson/*` branch.
 - Subagents skip the build so parallel agents never write to the same `.next` folder
   (two builds at once failed with `ENOENT` in testing).
 - After 3 identical failures in a row the hook lets the turn end, so an agent that can't
@@ -81,8 +85,10 @@ The hook is [bin/stop-verify.mjs](bin/stop-verify.mjs), registered in
 | [AGENTS.md](AGENTS.md) | Rules every Grok agent reads: stack, commands, file ownership |
 | [.grok/agents/](.grok/agents/) | `frontend` and `reviewer` agent definitions |
 | [.grok/skills/website-swarm/](.grok/skills/website-swarm/SKILL.md) | The plan, build, wire and review flow |
+| [.grok/skills/propose-lesson/](.grok/skills/propose-lesson/SKILL.md) | Drafts a team lesson on a `lesson/*` branch for review |
+| [.grok/rules/team-lessons.md](.grok/rules/team-lessons.md) | Team lessons every Grok session loads; see [docs/TEAM-WORKFLOW.md](docs/TEAM-WORKFLOW.md) |
 | [.grok/hooks/](.grok/hooks/stop-verify.json) | Stop and SubagentStop hook config |
-| [bin/](bin/) | The hook, its tests, and the launchers |
+| [bin/](bin/) | The hook, the content and lesson checks, their tests, and the launchers |
 | [app/](app/), [components/](components/) | The Next.js site: one component per section |
 | [docs/DEMO.md](docs/DEMO.md) | Run-of-show for a live demo |
 
