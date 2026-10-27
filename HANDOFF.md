@@ -3,8 +3,17 @@
 Date: 2026-10-27. Session: review of the Grok swarm demo, then the approved plan to make it
 demo-ready (plan: `C:\Users\RyanMichie\.claude\plans\please-create-a-plan-glittery-cocke.md`).
 Second session (same day): the interactive dry run of `docs/DEMO.md` from NEXT_SESSION.md.
+Third session (same day): the team-lessons plan, `docs/plans/2026-10-27-team-lessons.md`,
+built on `feature/team-lessons` and merged as PR #4.
 
 ## Built
+
+- Team-lessons session: 5 commits on `feature/team-lessons`, merged into `main` as `2d96625`:
+  - `bdbe8ce` `bin/check-content.mjs` (placeholder, elided-code and near-empty files in `app/`, `components/`, `lib/`) and `bin/check-lessons.mjs` (lesson with no source, over 40 lessons, `.grok/rules/` edited off a `lesson/*` branch). Both run in `lint`. `bin/test-checks.mjs` adds 8 tests as `test:checks`, now part of `verify`.
+  - `11981ea` `.grok/rules/team-lessons.md` with 5 sourced lessons from the bake-off.
+  - `802ca39` `propose-lesson` skill; `reviewer` returns "Proposed lessons"; `frontend` never edits `.grok/rules/`; `website-swarm` step 6 lists proposed lessons.
+  - `7d06a70` AGENTS.md "Team lessons vs personal preferences", `docs/TEAM-WORKFLOW.md`, README links and rows.
+  - `0e1e3c3` The contrast lesson also links WCAG 2.2 Non-text Contrast.
 
 - Dry-run session: `docs/DEMO.md` and `README.md` corrected from an interactive run (the
   commit after `ba35ba2`). DEMO.md now gives measured times, the real plan-approval pane,
@@ -21,6 +30,14 @@ Second session (same day): the interactive dry run of `docs/DEMO.md` from NEXT_S
 - The earlier sessions' 6 commits (`756bdf4` through `d3a7e08`) are unchanged. `components/Hero.tsx` has no type error.
 
 ## Decisions
+
+- Team-lessons session:
+  - `PLACEHOLDER` matches in capitals only (the plan said any case). Reason: any case would block the HTML `placeholder` attribute and Tailwind's `placeholder:` variant. The real bake-off case, `PLACEHOLDER_FOR_SPENDING_CONTENT`, is still caught.
+  - Lesson edits were made on `lesson/seed-lessons` and `lesson/wcag-contrast-link`, then fast-forwarded and deleted once merged (Ryan approved deleting the seed branch; the second followed the same rule). Reason: the new check blocks `.grok/rules/` edits on `feature/team-lessons`, and this dogfoods the propose-lesson flow.
+  - Two lessons cite local Grok session IDs (reviewer `01a17e18`, sweep swarm `01a17e59`) plus a public branch. Reason: that evidence exists only on this machine. The contrast lesson also links https://www.w3.org/TR/WCAG22/#non-text-contrast (checked: HTTP 200, anchor present).
+  - Added "follows team-lessons.md" to the reviewer checklist (not in the plan). Reason: otherwise nothing checks work against the lessons.
+  - Skipped the optional paid headless Grok run. Reason: it spends money, which needs Ryan's yes.
+  - PR #4 merged with a merge commit at Ryan's request; `feature/team-lessons` kept, as with earlier PRs.
 
 - Grok demo sessions use repo config only, through the launchers. Reason: the audience sees what a cloner gets, and `stop_gate.py` can't force HANDOFF rewrites on stage.
 - The hook runs in Node. Reason: it works the same on every OS, and `JSON.stringify` escapes Windows paths. The bash hook failed open under PowerShell, cut errors at 400 characters, and raising that cap broke its JSON on `C:\` paths (tested).
@@ -41,6 +58,14 @@ Second session (same day): the interactive dry run of `docs/DEMO.md` from NEXT_S
 
 ## Artifacts
 
+- `C:\Users\RyanMichie\Desktop\cursor-agent-swarm\docs\plans\2026-10-27-team-lessons.md`
+- `C:\Users\RyanMichie\Desktop\cursor-agent-swarm\docs\TEAM-WORKFLOW.md`
+- `C:\Users\RyanMichie\Desktop\cursor-agent-swarm\.grok\rules\team-lessons.md`
+- `C:\Users\RyanMichie\Desktop\cursor-agent-swarm\.grok\skills\propose-lesson\SKILL.md`
+- `C:\Users\RyanMichie\Desktop\cursor-agent-swarm\bin\check-content.mjs`
+- `C:\Users\RyanMichie\Desktop\cursor-agent-swarm\bin\check-lessons.mjs`
+- `C:\Users\RyanMichie\Desktop\cursor-agent-swarm\bin\test-checks.mjs`
+- `C:\Users\RyanMichie\Desktop\cursor-agent-swarm\package.json`
 - `C:\Users\RyanMichie\Desktop\cursor-agent-swarm\README.md`
 - `C:\Users\RyanMichie\Desktop\cursor-agent-swarm\docs\DEMO.md`
 - `C:\Users\RyanMichie\Desktop\cursor-agent-swarm\AGENTS.md`
@@ -57,6 +82,15 @@ Second session (same day): the interactive dry run of `docs/DEMO.md` from NEXT_S
 
 ## Acceptance status
 
+- Team-lessons session: all 7 "Done when" items in the plan met. Ryan signed off by merging PR #4.
+  - `.claude/verify` on merged `main` (`2d96625`): exit 0 in 79 s; `test:hook` 6 pass, `test:checks` 8 pass, 0 fail; check-content 6 files clean; check-lessons 5 lessons, each with a source.
+  - Hand tests: `// PLACEHOLDER` appended to `components/Hero.tsx` made lint exit 1 with `components/Hero.tsx:28: placeholder marker` (file restored). The uncommitted lessons file made lint fail on `feature/team-lessons`.
+  - `grok inspect` (1.0.70) through `bin\start-grok.cmd` lists `.grok/rules\team-lessons.md (project, ~528 tokens)`.
+  - Seed sources re-checked: sweep `9669ea8` Spending.vue is `PLACEHOLDER_FOR_SPENDING_CONTENT`; arena `20689e1` Dashboard.tsx:229-237; reviewer output on FilterBar.tsx:17; the sweep swarm's last message names 3000 and 8001; sweep PR #1 claims a Dashboard fix with no Dashboard file in its diff. Contrast by oklch-to-sRGB calculation: slate-400 2.63:1, slate-500 4.77:1 on white.
+  - `docs/TEAM-WORKFLOW.md`: 441 words by `wc -w`.
+  - `git diff main --stat` before the merge: no change to `bin/stop-verify.mjs`, `bin/start-grok.*`, `.grok/hooks/` or `docs/DEMO.md`.
+  - PR #4 merged 2026-10-27 18:54 UTC as `2d96625`: https://github.com/ryanjmichie-git/cursor-agent-swarm/pull/4
+  - Not done: the DEMO.md live run was not repeated on merged `main`; the paid headless run that quotes the lessons was skipped.
 - `.claude/verify` (`npm run verify`, run under cmd): exit 0 in 53 s on 2026-10-27; `test:hook` 6 pass, 0 fail; build prerendered `/`.
 - Fresh clone of `demo-ready`: `npm ci` and `npm run verify` exit 0 (80 s). The README setup, the DEMO.md log commands (PowerShell and bash) and the reset sequence were all run there. The dev server returned 200 with a test section, and the reset left a clean tree.
 - Live Grok 1.0.70, headless, through `bin\start-grok.cmd` from PowerShell, on a throwaway branch:
@@ -93,12 +127,15 @@ Second session (same day): the interactive dry run of `docs/DEMO.md` from NEXT_S
 ## Progress
 
 10 of 10 plan tasks done (T0 to T9). Dry-run kickoff: 4 of 4 done-when items met. Both
-optional follow-ups done and merged (PR #3).
+optional follow-ups done and merged (PR #3). Team-lessons plan: 7 of 7 done-when items met,
+merged (PR #4); its 1 to 1.5 hour estimate is used up, with no work left on it.
 
 ## What's next
 
-1. Done: `main` is pushed (`2529901` on `origin/main`).
-2. Next session: build team lessons and checks from the approved plan,
-   `docs/plans/2026-10-27-team-lessons.md`, on branch `feature/team-lessons`.
-   The bake-off results that motivate it are in `Desktop\grok-bakeoff\harness\HANDOFF.md`.
-3. Optional: report the `/quit` hang to xAI with the evidence above.
+1. Next session: rehearse `docs/DEMO.md` on merged `main` to confirm the demo still holds
+   with the new checks and lessons loaded, the one item this session didn't run live.
+2. Ryan's call: run the paid headless check (`bin\start-grok.cmd -p "List the team lessons
+   you must follow here." --output-format json`, a few cents) to confirm Grok quotes the 5 lessons.
+3. Ryan's call: add a CODEOWNERS entry for `/.grok/rules/` and "Require review from Code
+   Owners" here, as step 5 of `docs/TEAM-WORKFLOW.md` tells adopters to.
+4. Optional: report the `/quit` hang to xAI with the evidence above.
