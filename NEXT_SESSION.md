@@ -1,4 +1,4 @@
-cursor-agent-swarm, 2026-10-27, branch demo-ready after 1edc554 (handoff commit follows)
+cursor-agent-swarm, 2026-10-27, branch demo-ready at 3853c7e plus this note; PR #2 open into main
 ---
 Goal: Present the Grok swarm demo to AI enthusiasts from a merged `main`, after one interactive dry run proves every step in docs/DEMO.md.
 Effort: high. Plan mode first: no, the dry run comes first and fixes should be small.

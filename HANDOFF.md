@@ -57,13 +57,14 @@ demo-ready (plan: `C:\Users\RyanMichie\.claude\plans\please-create-a-plan-glitte
   - The `--trust` launcher argument was not run, because it writes Grok's trust store.
   - `npm audit` was not run (npm reported 2 vulnerabilities at install on 2026-10-26).
   - Plugin hooks (superpowers SessionStart) had no visible effect but were not proven inert.
-- Sign-off: Ryan reviews and merges the PR into `main`.
+- Published: `demo-ready` pushed to GitHub (public). PR #2 is open into `main`, mergeable, with 14 commits: https://github.com/ryanjmichie-git/cursor-agent-swarm/pull/2. A clone from GitHub returned the expected head commit.
+- Sign-off: Ryan reviews and merges PR #2.
 
 ## Progress
 
-9 of 10 plan tasks done (T0 to T8). T9, the push and PR, is next. No time estimate recorded.
+10 of 10 plan tasks done (T0 to T9). No time estimate recorded.
 
 ## What's next
 
-Push `demo-ready` and open a PR into `main` (T9). Then Ryan does one interactive dry run of
-`docs/DEMO.md` before presenting.
+Ryan reviews and merges PR #2, then does one interactive dry run of `docs/DEMO.md` before
+presenting (see NEXT_SESSION.md).
