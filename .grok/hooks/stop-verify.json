@@ -5,19 +5,20 @@
         "hooks": [
           {
             "type": "command",
-            "command": "bin/stop-verify.sh",
-            "timeout": 180
+            "command": "node",
+            "args": ["${CLAUDE_PROJECT_DIR}/bin/stop-verify.mjs"]
           }
         ]
       }
     ],
     "SubagentStop": [
       {
+        "matcher": "frontend",
         "hooks": [
           {
             "type": "command",
-            "command": "bin/stop-verify.sh",
-            "timeout": 120
+            "command": "node",
+            "args": ["${CLAUDE_PROJECT_DIR}/bin/stop-verify.mjs"]
           }
         ]
       }

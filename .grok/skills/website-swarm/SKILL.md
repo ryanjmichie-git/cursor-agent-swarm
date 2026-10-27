@@ -7,19 +7,23 @@ when-to-use: build website, swarm, multi-agent, implement page, demo
 # Website Swarm Skill
 
 ## When to use
-User wants a website change that benefits from parallel work (multiple sections, components, or review).
+A site change with two or more independent pieces (sections or components) that agents
+can build at the same time.
 
 ## Steps
-1. Confirm or create a short plan (use plan subagent or Plan mode if non-trivial).
-2. Identify independent slices (e.g., header, hero, features, footer, or page + components).
-3. Spawn parallel subagents:
-   - One or more `frontend` agents for UI slices
-   - Optionally an `explore` agent for existing patterns
-4. After implementation, spawn a `reviewer` (or trigger a workflow) to check against the plan and quality bar.
-5. Rely on the Stop hook (`bin/stop-verify.sh`) to block completion until verification passes.
-6. Summarize what was built, which agents ran, and any open items.
+1. Plan (use Plan mode for anything non-trivial). List each slice with one owner and the
+   exact files it may create, such as `components/HowItWorks.tsx`. No two slices share a file.
+2. Spawn one `frontend` subagent per slice, in parallel. Give each one:
+   - its file list and the section's purpose and copy;
+   - the anchor `id` to use;
+   - "match the container, link and focus styles in `components/Header.tsx`".
+3. When all of them finish, you (the parent) wire the new components into `app/page.tsx`
+   and add header links for any new anchors.
+4. Spawn `reviewer` with the plan text and the list of changed files.
+5. Finish the turn. The Stop hook runs `npm run verify`; fix anything it reports.
+6. Summarize: what was built, which agent owned which files, and the verify result.
 
 ## Constraints
-- Stay within the stack defined in AGENTS.md.
-- Prefer worktrees if agents will edit overlapping files.
-- Keep the human in the loop for large architectural choices.
+- Stay in the stack in AGENTS.md. New sections go in `components/`, one file each.
+- Subagents never edit `app/page.tsx`, config files or `package.json`.
+- Keep the human in the loop for structural choices.

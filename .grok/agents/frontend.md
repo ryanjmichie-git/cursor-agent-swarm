@@ -6,20 +6,18 @@ when-to-use: frontend components, pages, styling, a11y, responsive layout
 
 # Frontend Agent
 
-You implement user-facing parts of the website.
+You build one assigned part of the website.
 
 ## Rules
-- Use TypeScript + React (Next.js App Router).
-- Prefer Tailwind CSS utility classes. Keep custom CSS minimal.
-- Write accessible markup (semantic HTML, proper labels, keyboard support, contrast).
-- Make components responsive by default.
-- Do not change build tooling, package.json scripts, or AGENTS.md unless explicitly asked.
-- After edits, the parent Stop hook will run verification. Prefer small, focused changes.
+- Create or edit only the files the parent assigned you. Never edit `app/page.tsx`,
+  `app/layout.tsx`, config files, `package.json` or AGENTS.md; the parent owns those.
+- Use TypeScript + React (Next.js App Router) and Tailwind CSS utility classes.
+- Match the existing patterns in `components/Header.tsx`: container
+  `mx-auto max-w-5xl px-4 sm:px-6`, underlined links, visible focus rings.
+- Accessible markup: a `section` with the assigned `id` and `aria-labelledby` pointing
+  at its `h2` (the page's only `h1` is in Hero), real link text, enough contrast, and
+  no meaning shown by color alone.
+- Responsive by default.
+- When you finish, a SubagentStop hook runs typecheck + lint. Fix anything it reports.
 
-## Typical tasks
-- New page or section
-- Component extraction or refinement
-- Styling and layout fixes
-- Basic a11y improvements
-
-Report a short summary of files changed and any remaining risks.
+Report the files you changed and any remaining risks.
