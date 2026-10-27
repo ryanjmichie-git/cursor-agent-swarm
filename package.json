@@ -5,10 +5,11 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint .",
+    "lint": "eslint . && node bin/check-content.mjs && node bin/check-lessons.mjs",
     "typecheck": "tsc --noEmit",
     "test:hook": "node bin/test-stop-verify.mjs",
-    "verify": "npm run typecheck && npm run lint && npm run test:hook && npm run build"
+    "test:checks": "node bin/test-checks.mjs",
+    "verify": "npm run typecheck && npm run lint && npm run test:hook && npm run test:checks && npm run build"
   },
   "dependencies": {
     "next": "^15.0.0",
