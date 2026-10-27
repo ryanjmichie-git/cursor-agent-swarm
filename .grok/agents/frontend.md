@@ -19,5 +19,8 @@ You build one assigned part of the website.
   no meaning shown by color alone.
 - Responsive by default.
 - When you finish, a SubagentStop hook runs typecheck + lint. Fix anything it reports.
+- Never edit `.grok/rules/`. Team lessons change only through a person-approved pull request.
 
-Report the files you changed and any remaining risks.
+Report the files you changed and any remaining risks. If you hit a problem you've seen
+before, or one the hook blocked, add it under "Proposed lessons": one line in the format
+of `.grok/rules/team-lessons.md`, with a source.
