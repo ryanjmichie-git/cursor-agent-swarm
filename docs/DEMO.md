@@ -1,14 +1,9 @@
 # Demo run-of-show
 
-The full run hasn't been timed end to end. Each main-agent turn ends with about a minute
-of checks, and each subagent with about 15 s. You need two terminals in the repo folder
-and a browser.
+Rehearsed in full on 2026-10-27 (Grok 1.0.70, Windows): about 32 minutes from
+`/hooks-list` to the browser, 21 of them in step 4. You need two terminals in the repo
+folder and a browser.
 Commands are shown for PowerShell, with the macOS, Linux or Git Bash version after "or".
-
-**What was rehearsed.** Steps 6 and 7 were checked with headless Grok 1.0.70 on Windows
-(`grok --prompt-file ...`) on 2026-10-27, with the hook log shown below. Steps 3 to 5
-follow the flow that built the current header, hero and footer, but the three new
-sections themselves have not been rehearsed. Do one dry run before presenting.
 
 ## Before the audience arrives
 
@@ -19,7 +14,7 @@ sections themselves have not been rehearsed. Do one dry run before presenting.
    npm ci
    npm run verify
    ```
-   `verify` ends with the build's route table in about a minute.
+   `verify` ends with the build's route table. The block takes about 2.5 minutes.
 2. **Terminal 1.** Work on a throwaway branch: `git switch -c demo-run`
 3. **Terminal 2.** Start an empty hook log and watch it:
    ```
@@ -34,7 +29,8 @@ sections themselves have not been rehearsed. Do one dry run before presenting.
 ## Live
 
 1. **Grok.** Type `/hooks-list`.
-   Expect a Stop hook and a SubagentStop hook (matcher `frontend`), both running `node`.
+   Expect a Stop hook and a SubagentStop hook (matcher `frontend`), both `command: node`.
+   Claude Code plugin hooks may be listed too.
 
 2. **Say:** "Every time an agent tries to finish, that hook type-checks, lints and builds
    the site. If something fails, the agent gets the error back and has to keep going."
@@ -43,16 +39,15 @@ sections themselves have not been rehearsed. Do one dry run before presenting.
    ```
    /plan Use the website-swarm skill. Plan three new sections for the page, one frontend agent each, built in parallel: (1) "How it works": how the Stop hook checks every turn, in components/HowItWorks.tsx with id how-it-works; (2) "The agents": the frontend and reviewer roles, in components/Agents.tsx with id agents; (3) "Try it": the clone and run steps from README.md, in components/TryIt.tsx with id try-it. Take every fact from AGENTS.md and README.md.
    ```
-   Expect a plan that gives each agent exactly one file and leaves `app/page.tsx` to the
-   parent.
+   After about 90 s, expect a plan that gives each agent exactly one file and leaves
+   `app/page.tsx` and the header to the parent.
 
-4. **Grok.** Press `a` to approve the plan. If the cursor is in the prompt box, press `Esc`
-   first.
-   Expect three `frontend` subagents working at the same time. Then the parent wires the
-   sections into `app/page.tsx`, adds header links, and finishes its turn.
+4. **Grok.** When the `plan.md` pane opens, press `a` (approve).
+   Expect three `frontend` subagents working at the same time, 2 to 9 minutes each. The
+   parent then wires the sections into `app/page.tsx`, adds header links, runs the
+   `reviewer`, and finishes. Its summary gives the reviewer's `Pass` or `needs-work`.
    **Terminal 2** shows one `SubagentStop frontend quick pass` line per subagent, then
-   `Stop main full pass` (each subagent check takes about 15 s; the full check about a
-   minute).
+   `Stop main full pass`. This step takes about 21 minutes: use it for step 5 and questions.
 
 5. **Say:** "Each agent owned one file, so no two agents could collide. Only the parent
    touches the page itself."
@@ -62,24 +57,26 @@ sections themselves have not been rehearsed. Do one dry run before presenting.
    Add this line as the first line inside the Hero function in components/Hero.tsx, then end your turn: const ready: number = "no";
    ```
    Expect Grok to add the line and try to stop. **Terminal 2** shows
-   `Stop main full block`. Grok reports the hook caught a type error (TS2322), removes the
-   line, and finishes. Terminal 2 then shows `Stop main full pass`.
-   Rehearsed log: `Stop main full block 4.2s`, then `Stop main full pass 44.1s`.
+   `Stop main full block`. Grok shows `Stop blocked by project/stop-verify, continuing`
+   with the TS2322 error, removes the line, and finishes. Terminal 2 then shows
+   `Stop main full pass`.
+   Rehearsed log: `Stop main full block 4.3s`, then `Stop main full pass 46.7s`.
 
-7. **Grok.** Type:
+7. **Optional.** The reviewer already ran in step 4. To run it on its own, type:
    ```
    Run the reviewer agent on this change. Give it the plan and the list of changed files.
    ```
-   Expect `Pass` or `needs-work`, with findings by file and line.
+   Expect `Pass` or `needs-work` in about 7 minutes.
 
 8. **Terminal 2.** Press `Ctrl+C` to stop watching the log, then run `npm run dev`.
-   **Browser:** open http://localhost:3000. Use the header links to jump to each new
-   section.
+   **Browser:** open the URL it prints.
+   Use the header links to jump to each new section.
 
 ## Afterward
 
 1. **Terminal 2.** Press `Ctrl+C` to stop the dev server.
-2. **Terminal 1.** Quit Grok, then reset:
+2. **Terminal 1.** Type `/quit`. If the prompt doesn't come back, close that terminal and
+   open a new one in the repo folder. Then reset:
    ```
    git switch --discard-changes main
    git branch -D demo-run

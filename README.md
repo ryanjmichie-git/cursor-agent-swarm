@@ -33,7 +33,7 @@ npm ci
 npm run verify
 ```
 
-`npm run verify` should end with the build's route table, in about a minute.
+`npm run verify` should end with the build's route table, in about 1.5 minutes.
 
 Then start Grok with the launcher for your system:
 
@@ -57,7 +57,7 @@ Troubleshooting.
 | When | What runs | Typical time on the test machine |
 |------|-----------|-----------------------------------|
 | The main agent ends a turn | `npm run verify`: typecheck, lint, hook tests, build | 44 to 72 s when passing; 4 s when typecheck fails |
-| A `frontend` subagent ends | typecheck + lint only | 12 to 15 s |
+| A `frontend` subagent ends | typecheck + lint only | 12 to 16 s |
 | The session closes | nothing (skipped) | |
 
 - A failure prints `{"decision":"block","reason":...}` with the error text, and the agent
@@ -94,9 +94,9 @@ The hook is [bin/stop-verify.mjs](bin/stop-verify.mjs), registered in
 | Hooks never run; the log file isn't created | Folder not trusted | Type `/hooks-trust` in Grok, then start a new session. |
 | `command not found: bin/stop-verify.sh` or `PowerShell would open stop-verify.sh with its file type's app` | An old copy of the hook config | Pull the latest `.grok/hooks/stop-verify.json`. The hook now runs as `node`, so no shell is involved. |
 | The Stop hook blocks again and again | The agent can't or won't fix the error, for example because you told it not to edit files | Let it fix the error. The hook gives up after 3 identical failures; Grok stops after 8. |
-| Your Claude Code plugins still show in `grok inspect` or the `/` menu | Grok 1.0.70 loads plugins from `~/.claude/plugins`. The launcher turns their skills off, but no per-launch switch unloads the plugins themselves (`grok plugin list` shows only Grok-installed plugins). | Usually harmless: in the rehearsal runs they had no visible effect. If one gets in the way, present from an account without it. |
+| Your Claude Code plugins still show in `grok inspect`, `/hooks-list` or the `/` menu | Grok 1.0.70 loads plugins from `~/.claude/plugins`. The launcher turns their skills off, but no per-launch switch unloads the plugins themselves. | Usually harmless: in the rehearsal runs they had no visible effect. If one gets in the way, present from an account without it. |
 | `npm warn install-scripts unrs-resolver` during `npm ci` | npm 11 holds back that package's install script | Safe to ignore here: `npm run verify` passes without it. |
-| The terminal won't accept typing after you quit Grok's full-screen view | Cause unknown (seen once on Windows in VS Code) | Close that terminal and open a new one. |
+| The prompt doesn't come back after `/quit` | `grok.exe` kept running after `/quit` in 2 of 2 rehearsal runs (Windows) | Close that terminal and open a new one. |
 | `grok --resume <id>` says the session wasn't found | Cause unknown (seen once) | Start a new session. |
 
 ## Reset after a demo
