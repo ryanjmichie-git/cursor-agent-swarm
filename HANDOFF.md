@@ -34,6 +34,7 @@ Second session (same day): the interactive dry run of `docs/DEMO.md` from NEXT_S
 - The dry run used a `demo-run` branch cut from `demo-ready`, not `main`, because PR #2 isn't merged. Reason: the doc fixes then ride in PR #2, so the merged `main` has them.
 - Grok's TUI was driven through a Windows pseudo-terminal (pywinpty + pyte in a scratch venv). Reason: headless `grok -p` can't test `/hooks-list`, `/plan` or the `a` key.
 - DEMO.md step 7 (reviewer) is now optional. Reason: the `website-swarm` skill already runs the reviewer inside step 4; repeating it took 6m48s.
+- Claude merged PR #2 on Ryan's "use your best judgment", with a merge commit, and kept `demo-ready`. Reason: dry run and verify passed, no CI or branch protection, and a merge commit lets local `main` fast-forward.
 - No README row for the `npm audit` result. Reason: the README would grow past its last draft, and the fix (Next.js 16) is Ryan's call.
 
 ## Artifacts
@@ -79,18 +80,16 @@ Second session (same day): the interactive dry run of `docs/DEMO.md` from NEXT_S
   - The `/quit` hang was seen only under the pseudo-terminal, not in a plain terminal.
   - The new sections were not checked at phone width.
   - Plugin hooks (superpowers SessionStart) are listed by `/hooks-list` and had no visible effect, but were not proven inert.
-- Published: `demo-ready` pushed to GitHub (public). PR #2 is open into `main`, mergeable, with 15 commits: https://github.com/ryanjmichie-git/cursor-agent-swarm/pull/2. The dry-run doc commit is local only, not pushed.
-- Sign-off: Ryan reviews and merges PR #2.
+- Published: `9fd6cce` pushed to `demo-ready` (Ryan approved). PR #2 merged into `main` at 2026-10-27 13:09 UTC as `0435489`: https://github.com/ryanjmichie-git/cursor-agent-swarm/pull/2
+- Merged `main`: DEMO.md step 1 as written: `git pull` fast-forwarded `d3a7e08..0435489`; `npm ci` and `npm run verify` exit 0 (195 s; 6 hook tests pass). The reset, run after simulated demo output on `demo-run`, left `git status` clean.
+- The commit after `0435489` (this handoff, kickoff, and the step 1 time in DEMO.md) is local only, not pushed.
 
 ## Progress
 
-10 of 10 plan tasks done (T0 to T9). Dry-run kickoff: 3 of 4 done-when items met; the
-merge is Ryan's.
+10 of 10 plan tasks done (T0 to T9). Dry-run kickoff: 4 of 4 done-when items met.
 
 ## What's next
 
-1. Ryan approves pushing the dry-run commit to `demo-ready`, which updates PR #2.
-2. Ryan merges PR #2 with **Create a merge commit**. Local `main` has 6 commits that
-   aren't on `origin/main`; a squash or rebase merge would make DEMO.md step 1's
-   `git pull` diverge.
-3. Optional: decide whether to move to Next.js 16 for the PostCSS advisory.
+1. Ryan approves pushing the local handoff commit to `origin/main`.
+2. Optional: decide whether to move to Next.js 16 for the PostCSS advisory.
+3. Optional: check whether `/quit` hangs in a plain terminal too.

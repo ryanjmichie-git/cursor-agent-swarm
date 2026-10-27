@@ -1,10 +1,10 @@
-cursor-agent-swarm, 2026-10-27, branch demo-ready at the dry-run docs commit (local, not pushed); PR #2 open into main
+cursor-agent-swarm, 2026-10-27, branch main one local commit ahead of origin/main (0435489, PR #2 merged)
 ---
-Goal: Present the Grok swarm demo from a merged `main`. The interactive dry run is done and docs/DEMO.md is corrected from it.
-Effort: low. Plan mode first: no.
+Goal: Keep `main` demo-ready. The interactive dry run passed and PR #2 is merged; what's left is optional.
+Effort: low. Plan mode first: yes for a Next.js 16 upgrade, no otherwise.
 Done when:
-- Ryan has approved the push, and the dry-run commit is on `origin/demo-ready` (PR #2 shows it).
-- PR #2 is merged into `main` with a merge commit, and `git switch main; git pull` fast-forwards.
-- `npm run verify` exits 0 on the merged `main`, and the DEMO.md reset leaves `git status` clean there.
+- Ryan has approved the push, and the local handoff commit is on `origin/main`.
+- Ryan has decided on Next.js 16 for the PostCSS advisory (`npm audit`: 1 high, 1 moderate).
+- `npm run verify` exits 0 on `main`.
 Don't touch: ~/.claude and ~/.grok config; the behavior of bin/stop-verify.mjs.
 Read first: HANDOFF.md (Acceptance status, What's next), docs/DEMO.md

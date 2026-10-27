@@ -14,7 +14,7 @@ Commands are shown for PowerShell, with the macOS, Linux or Git Bash version aft
    npm ci
    npm run verify
    ```
-   `verify` ends with the build's route table. The block takes about 2.5 minutes.
+   `verify` ends with the build's route table. The block takes 2.5 to 3.5 minutes.
 2. **Terminal 1.** Work on a throwaway branch: `git switch -c demo-run`
 3. **Terminal 2.** Start an empty hook log and watch it:
    ```
