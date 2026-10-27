@@ -86,15 +86,17 @@ Second session (same day): the interactive dry run of `docs/DEMO.md` from NEXT_S
 - Published: `9fd6cce` pushed to `demo-ready` (Ryan approved). PR #2 merged into `main` at 2026-10-27 13:09 UTC as `0435489`: https://github.com/ryanjmichie-git/cursor-agent-swarm/pull/2
 - Merged `main`: DEMO.md step 1 as written: `git pull` fast-forwarded `d3a7e08..0435489`; `npm ci` and `npm run verify` exit 0 (195 s; 6 hook tests pass). The reset, run after simulated demo output on `demo-run`, left `git status` clean.
 - `3febb8e` (handoff, kickoff, step 1 time) pushed to `origin/main` (Ryan approved).
-- Branch `post-dry-run-fixes` from `3febb8e`: the PostCSS override and the `/quit` doc update. Local only, not pushed.
+- `post-dry-run-fixes` (the PostCSS override and the `/quit` doc update) pushed and merged into `main` via PR #3 as `97fc742` at 2026-10-27 13:48 UTC (Ryan approved): https://github.com/ryanjmichie-git/cursor-agent-swarm/pull/3
+- Merged `main` at `97fc742`: DEMO.md step 1 as written: `git pull` fast-forwarded `3febb8e..97fc742`; `npm ci` and `npm run verify` exit 0 (192 s; 6 hook tests pass); `npm audit` found 0 vulnerabilities. The reset, run after simulated demo output, left `git status` clean.
+- The commit after `97fc742` (this handoff and the kickoff) is local only, not pushed.
 
 ## Progress
 
 10 of 10 plan tasks done (T0 to T9). Dry-run kickoff: 4 of 4 done-when items met. Both
-optional follow-ups done on `post-dry-run-fixes`, waiting on a push.
+optional follow-ups done and merged (PR #3).
 
 ## What's next
 
-1. Ryan approves pushing `post-dry-run-fixes` and merging it into `main`. It changes the
-   installed PostCSS, so rerun DEMO.md setup step 1 after the merge.
-2. Optional: report the `/quit` hang to xAI with the evidence above.
+1. Ryan approves pushing the local handoff commit to `origin/main`.
+2. Present from `main` with `docs/DEMO.md`.
+3. Optional: report the `/quit` hang to xAI with the evidence above.
