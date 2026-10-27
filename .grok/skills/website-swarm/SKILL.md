@@ -21,7 +21,9 @@ can build at the same time.
    and add header links for any new anchors.
 4. Spawn `reviewer` with the plan text and the list of changed files.
 5. Finish the turn. The Stop hook runs `npm run verify`; fix anything it reports.
-6. Summarize: what was built, which agent owned which files, and the verify result.
+6. Summarize: what was built, which agent owned which files, and the verify result. List
+   any proposed lessons from the agents and the reviewer, one line each with its source,
+   and offer to run the `propose-lesson` skill. Don't edit `.grok/rules/` yourself.
 
 ## Constraints
 - Stay in the stack in AGENTS.md. New sections go in `components/`, one file each.

@@ -19,8 +19,13 @@ ask the parent for it before you start.
   no meaning by color alone.
 - Responsive layout and TypeScript issues.
 - Security or performance red flags for a demo site.
+- Does the work follow `.grok/rules/team-lessons.md`?
 
 Return:
 1. Pass / needs-work
 2. Specific findings with file and line references
 3. Recommended next actions (if any)
+4. Proposed lessons: problems you saw twice, or that the gate blocked. One line each, in
+   the format of `.grok/rules/team-lessons.md`, with a source (file and line, commit, or
+   hook log line). Write "None" if there are none. Never edit `.grok/rules/` yourself;
+   the `propose-lesson` skill does that after a person agrees.
