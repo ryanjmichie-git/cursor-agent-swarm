@@ -1,115 +1,58 @@
-# AGENTS.md — Grok Swarm Website Demo
+# AGENTS.md: Grok swarm website demo
 
-This repository is the foundation for a live demo: using a swarm of Grok Build agents (with optional Grok Bots) to plan, build, test, and evaluate a production-quality website.
+A one-page Next.js site that Grok Build agents extend in parallel. A Stop hook keeps
+any turn from ending until `npm run verify` passes.
 
-Grok Build is deliberately Claude Code compatible. It reads `AGENTS.md`, `CLAUDE.md`, `.claude/`, `.cursor/`, skills, hooks, agents, and MCP with zero extra setup.
+## Stack and layout
 
-## Core Principles
-
-- Prefer short, specific instructions. Long files are followed less reliably.
-- Plan first for anything non-trivial. Use Plan mode or the built-in `plan` subagent.
-- Use parallel subagents (and worktrees when needed) for independent work.
-- Never finish a turn that changes code without running verification.
-- Keep the human in the loop for architecture decisions and final review.
-- Prefer official Grok Build behavior over community workarounds.
-
-## Website Stack (demo default)
-
-- Next.js (App Router) + TypeScript + Tailwind CSS
-- Simple content site or marketing page that can be extended live
-- Quality bar: builds cleanly, passes typecheck, basic a11y, responsive
-
-Change the stack in this file if the demo needs something else. Agents must follow the commands listed below.
+- Next.js 15 (App Router), React 19, TypeScript (strict), Tailwind CSS 4.
+- `app/page.tsx` assembles the page. `components/` holds one file per section.
+- `bin/` holds the Stop hook and the Grok launchers. `.grok/` holds the agents, hook config and skill.
+- Quality bar: verify passes; semantic, keyboard-accessible markup; responsive; meaning
+  never shown by color alone.
 
 ## Commands
 
 ```bash
-# Install
-npm install
-
-# Dev
-npm run dev
-
-# Typecheck
-npx tsc --noEmit
-
-# Lint
-npm run lint
-
-# Build (must succeed)
-npm run build
-
-# Quick verify used by Stop hooks
-npm run verify   # defined in package.json as typecheck + lint + build
+npm ci              # install exactly what package-lock.json pins
+npm run dev         # http://localhost:3000
+npm run typecheck   # tsc --noEmit
+npm run lint        # eslint .
+npm run test:hook   # tests for bin/stop-verify.mjs
+npm run build       # next build
+npm run verify      # typecheck + lint + test:hook + build (the gate)
 ```
 
-## Agent Team Roles (recommended for the demo)
+## Agents
 
-| Role              | Type / Location              | Responsibility                              | Notes |
-|-------------------|------------------------------|---------------------------------------------|-------|
-| Orchestrator      | Parent session               | Plan, delegate, synthesize, final review    | Stay on the main thread |
-| Explore / Research| `explore` (built-in)         | Map codebase, find patterns, research docs  | Read-only |
-| Planner           | `plan` (built-in) or custom  | Draft implementation plan                   | No edits |
-| Frontend          | Custom in `.grok/agents/`    | Components, styling, pages, a11y            | Parallel-friendly |
-| Tester / QA       | Custom or general-purpose    | Write/run tests, visual/a11y checks         | Use Stop hook |
-| Reviewer / Skeptic| Custom or workflow           | Independent review against plan + quality bar | Prefer workflow for larger jobs |
+| Agent | Source | Job |
+|-------|--------|-----|
+| Parent session | you | Plan, assign files, wire `app/page.tsx`, final summary |
+| `frontend` | `.grok/agents/frontend.md` | Build one assigned section; parallel-safe |
+| `reviewer` | `.grok/agents/reviewer.md` | Read-only check against the plan |
+| `explore`, `plan` | built in | Map the code; draft a plan |
 
-Custom agents live in `.grok/agents/*.md`. Personas (tone/focus overlays) can live in `.grok/personas/`.
+The `website-swarm` skill (`.grok/skills/website-swarm/SKILL.md`) runs this flow.
 
-## Subagents & Parallelism
+## Working rules
 
-- Default: spawn up to ~4–8 parallel subagents for independent tasks.
-- Use worktrees (`--worktree` or subagent worktree support) when agents edit overlapping areas.
-- For complex multi-phase work (full site audit, multi-page implementation + review), prefer a Grok Build workflow (up to 128 agents, skeptic agents supported).
-- Grok Bots (persistent, shared cloud computer) are complementary for orchestration, routines, or long-running coordination — not a replacement for in-repo Grok Build coding agents.
+1. Plan first for anything beyond one file. Wait for human approval on structure.
+2. One owner per file. Each `frontend` agent creates or edits only its assigned files.
+   The parent alone edits `app/page.tsx`, `app/layout.tsx`, config and `package.json`.
+3. Don't use worktrees here. File ownership already prevents conflicts, and a fresh git
+   worktree has no `node_modules`, so verify can't run in it.
+4. After implementation, run `reviewer` with the plan text and the list of changed files.
+5. If the Stop hook blocks, fix the cause in the same turn. Never end a turn red on purpose.
+6. Small commits. Say which agents did the work.
 
-## Quality Gates & Evals
+## The gate
 
-- A Stop hook must run before the agent is allowed to finish any turn that changed code.
-- Minimum gate: typecheck + lint + build succeed.
-- Optional: basic a11y (axe or similar), visual snapshot, or unit tests.
-- The hook returns `{"decision":"block","reason":"..."}` on failure so the agent continues in the same turn.
-- Cap: Grok Build stops after 8 continuations per turn (fail-open on hook timeout/crash).
-- Also use SubagentStop for child agents when useful.
+- `.grok/hooks/stop-verify.json` runs `node bin/stop-verify.mjs` directly, with no shell.
+- Main agent Stop: full `npm run verify`. `frontend` SubagentStop: typecheck + lint only,
+  so parallel agents never build into the same `.next` folder.
+- A failure blocks with the error text and the agent keeps working. After 3 identical
+  failures in a row the turn may end red; Grok's own limit is 8 continuations per turn.
+- Each run adds a line to `.grok/logs/stop-verify.log`.
+- Check what Grok loaded with `grok inspect` or `/hooks-list`.
 
-See `.grok/hooks/stop-verify.json` and the companion script.
-
-## Skills
-
-- Put repeatable procedures in `.grok/skills/<name>/SKILL.md`.
-- Good candidates for this demo: “implement-page”, “review-diff”, “a11y-check”, “deploy-preview”.
-- Capture a good session with `/skillify`.
-- Skills are auto-invoked when relevant or called by name.
-
-## Workflow Rules
-
-1. Start complex work in Plan mode or with a plan subagent. Wait for human approval on architecture.
-2. Decompose into independent slices so subagents can run in parallel.
-3. After implementation, spawn a reviewer (or use a workflow with skeptic agents).
-4. Never claim done until the Stop-hook verification passes.
-5. Prefer small, focused commits. Describe subagent usage in commit messages when relevant.
-
-## File Layout Conventions
-
-```
-AGENTS.md                 # this file
-.grok/
-  hooks/                  # Stop / other lifecycle hooks
-  agents/                 # custom agent definitions (*.md)
-  skills/                 # SKILL.md packages
-  workflows/              # saved workflows (optional)
-src/                      # application code
-```
-
-## Verification
-
-Run `grok inspect` to confirm which rules, skills, hooks, and agents Grok Build loaded.
-
-## Demo Success Criteria
-
-- One parent session can plan a small site change.
-- Parallel subagents implement independent pieces (e.g., header + hero + footer).
-- Stop hook blocks completion until `npm run verify` passes.
-- Final output is a clean, buildable site with clear agent traces.
-
-Last updated: 2026-10-26
+Last updated: 2026-10-27
