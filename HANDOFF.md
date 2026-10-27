@@ -97,6 +97,8 @@ optional follow-ups done and merged (PR #3).
 
 ## What's next
 
-1. Ryan approves pushing the local handoff commit to `origin/main`.
-2. Present from `main` with `docs/DEMO.md`.
+1. Done: `main` is pushed (`2529901` on `origin/main`).
+2. Next session: build team lessons and checks from the approved plan,
+   `docs/plans/2026-10-27-team-lessons.md`, on branch `feature/team-lessons`.
+   The bake-off results that motivate it are in `Desktop\grok-bakeoff\harness\HANDOFF.md`.
 3. Optional: report the `/quit` hang to xAI with the evidence above.
