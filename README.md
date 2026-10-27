@@ -91,6 +91,7 @@ The hook is [bin/stop-verify.mjs](bin/stop-verify.mjs), registered in
 | [bin/](bin/) | The hook, the content and lesson checks, their tests, and the launchers |
 | [app/](app/), [components/](components/) | The Next.js site: one component per section |
 | [docs/DEMO.md](docs/DEMO.md) | Run-of-show for a live demo |
+| [docs/agent-swarm-booth-deck.pptx](docs/agent-swarm-booth-deck.pptx) | Booth deck: what we built, bake-off results and screenshots, research, next steps |
 
 ## Troubleshooting
 

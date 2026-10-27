@@ -8,6 +8,11 @@ built on `feature/team-lessons` and merged as PR #4.
 
 ## Built
 
+- Booth deck (same day, after the wrap): `docs/agent-swarm-booth-deck.pptx`, 8 slides. Slide 1 is Ryan's
+  `Agent Swarm Booth Pitch.pptx` title slide, unchanged. Then: what we did, results table, two
+  grok.com-vs-swarm screenshot slides, industry research, value by part, next steps. Every slide has a
+  source line; speaker notes hold the talk track and links. The deck builder script and research pages
+  are in this session's scratchpad only, not in the repo.
 - Team-lessons session: 5 commits on `feature/team-lessons`, merged into `main` as `2d96625`:
   - `bdbe8ce` `bin/check-content.mjs` (placeholder, elided-code and near-empty files in `app/`, `components/`, `lib/`) and `bin/check-lessons.mjs` (lesson with no source, over 40 lessons, `.grok/rules/` edited off a `lesson/*` branch). Both run in `lint`. `bin/test-checks.mjs` adds 8 tests as `test:checks`, now part of `verify`.
   - `11981ea` `.grok/rules/team-lessons.md` with 5 sourced lessons from the bake-off.
@@ -31,6 +36,10 @@ built on `feature/team-lessons` and merged as PR #4.
 
 ## Decisions
 
+- Booth deck:
+  - Research covers both public evidence (DORA 2025, Stack Overflow 2025, Anthropic) and the three people the title slide names (Ryan chose "both"). Every quote was matched word for word against a saved copy of its source. METR's 2025 study was left out because METR now marks it out of date.
+  - The value ranking (spec, gate, roles, rules, skills, lessons, launchers) is Claude's judgment from one run per setup; the notes say so.
+  - The title slide stays verbatim. Flagged, not fixed: it promises a "tester" role (the repo has frontend and reviewer only), "a website in 5 minutes" (rehearsal: about 21 minutes), and shows the Cursor logo while the demo runs Grok Build.
 - Team-lessons session:
   - `PLACEHOLDER` matches in capitals only (the plan said any case). Reason: any case would block the HTML `placeholder` attribute and Tailwind's `placeholder:` variant. The real bake-off case, `PLACEHOLDER_FOR_SPENDING_CONTENT`, is still caught.
   - Lesson edits were made on `lesson/seed-lessons` and `lesson/wcag-contrast-link`, then fast-forwarded and deleted once merged (Ryan approved deleting the seed branch; the second followed the same rule). Reason: the new check blocks `.grok/rules/` edits on `feature/team-lessons`, and this dogfoods the propose-lesson flow.
@@ -58,6 +67,7 @@ built on `feature/team-lessons` and merged as PR #4.
 
 ## Artifacts
 
+- `C:\Users\RyanMichie\Desktop\cursor-agent-swarm\docs\agent-swarm-booth-deck.pptx` (same file as `C:\Users\RyanMichie\Desktop\Agent Swarm Booth Pitch - Demo Deck.pptx`)
 - `C:\Users\RyanMichie\Desktop\cursor-agent-swarm\docs\plans\2026-10-27-team-lessons.md`
 - `C:\Users\RyanMichie\Desktop\cursor-agent-swarm\docs\TEAM-WORKFLOW.md`
 - `C:\Users\RyanMichie\Desktop\cursor-agent-swarm\.grok\rules\team-lessons.md`
@@ -132,6 +142,11 @@ merged (PR #4); its 1 to 1.5 hour estimate is used up, with no work left on it.
 
 ## What's next
 
+0. Before presenting the booth deck (Ryan): check the Karpathy quote against the YouTube video (it comes
+   from a third-party transcript); decide whether to mention that Lee Robinson (now SpaceX), Lauren Tan
+   (now xAI) and Karpathy (now Anthropic) have moved; install Space Grotesk and JetBrains Mono on the
+   presenting machine (PowerPoint here showed a substitute font on every slide); review the title-slide
+   flags under Decisions.
 1. Next session: rehearse `docs/DEMO.md` on merged `main` to confirm the demo still holds
    with the new checks and lessons loaded, the one item this session didn't run live.
 2. Ryan's call: run the paid headless check (`bin\start-grok.cmd -p "List the team lessons
